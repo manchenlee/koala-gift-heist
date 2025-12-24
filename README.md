@@ -1,20 +1,12 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
-
-# Run and deploy your AI Studio app
-
-This contains everything you need to run your app locally.
-
-View your app in AI Studio: https://ai.studio/apps/drive/1d2tE0Q9MrppgB44GDg6zSGwH3wvxrcVH
-
-## Run Locally
-
-**Prerequisites:**  Node.js
-
-
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+# Koala's Gift Heist
+你是隻得天獨厚的無尾熊，然而出身南半球的詛咒使你無法領受聖誕老公公的恩澤，  
+悲憤交加的你在聖誕節前夕隻身闖進聖誕老公公的地盤，準備把孩子們的禮物洗劫一空。  
+豈料躲在房屋角落和雪地深處的北方萬物，好似本能排斥南半球血液般動了起來……  
+操作方法：WASD／方向鍵移動  
+遊戲目標：在被抓到前盡可能掠奪禮物吧！  
+敵人和物件：  
+- 小心雪球，它會把你看上的禮物捲走！
+- 麋鹿喜歡在屋內健身，牠一振臂就會從茂密的腋毛抖落禮物或聖誕樹！
+- 聖誕樹是古板的守舊派，他們絕不會給南半球血脈半點容身之處！
+- 戴上聖誕帽，在五秒內化身為間諜聖誕老人，短暫取得北方萬物的敬重  
+遊戲連結：https://mchenlee.itch.io/koala-gift-heist
