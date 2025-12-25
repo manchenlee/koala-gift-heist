@@ -740,66 +740,79 @@ function App() {
             imageRendering: 'pixelated'
         }}
     >
-      {/* Header with blurred background for readability - Reduced bottom margin for compact screens */}
-      <div className="w-full max-w-lg flex justify-between items-center mb-4 bg-white/90 backdrop-blur-sm p-4 rounded-xl shadow-lg">
+      {/* 
+        Main Responsive Container
+        - Defines the maximum dimensions of the entire game UI.
+        - Using container queries (@container) to scale children text/padding.
+        - width: min(540px, 90vw, 65vh) -> Constraints:
+            1. Max width 540px (design choice)
+            2. 90vw (mobile side margins)
+            3. 65vh (vertical constraint converted to width, assuming ~1:1.3 aspect ratio for whole UI)
+      */}
+      <div 
+        className="@container flex flex-col items-center relative"
+        style={{ 
+            width: 'min(540px, 90vw, 65vh)',
+            minWidth: '480px' // Lock min value
+        }}
+      >
+
+        {/* Header - Scaled using cqw */}
+      <div className="w-full flex justify-between items-center bg-white/90 backdrop-blur-sm rounded-xl shadow-lg mb-[3cqw] p-[3cqw]">
         <div>
-           <h1 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-green-600">
+           <h1 className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-green-600 text-[5cqw] leading-none">
              Koala's Gift Heist
            </h1>
-           <p className="text-slate-600 text-sm font-semibold">Steal 🎁 | Avoid ⚪🦌🎄</p>
+           <p className="text-slate-600 font-semibold text-[2.5cqw] mt-[1cqw]">Steal 🎁 | Avoid ⚪🦌🎄</p>
         </div>
         <div className="text-right">
-            <div className="text-4xl font-mono font-bold text-slate-800">{score}</div>
-            <div className="text-xs text-slate-600 uppercase font-bold">Score</div>
+            <div className="font-mono font-bold text-slate-800 text-[6cqw] leading-none">{score}</div>
+            <div className="text-slate-600 uppercase font-bold text-[2cqw]">Score</div>
         </div>
       </div>
 
-      {/* Bonus Indicator Placeholder */}
-      <div className="h-8 mb-2 w-full text-center flex items-center justify-center">
-        <div className={`${isBonusActive ? 'opacity-100 animate-pulse' : 'opacity-0'} text-amber-300 font-bold text-lg transition-opacity duration-200`}>
+      {/* Bonus Indicator - Scaled using cqw */}
+        <div className="w-full text-center flex items-center justify-center mb-[2cqw] h-[5cqw]">
+            <div className={`${isBonusActive ? 'opacity-100 animate-pulse' : 'opacity-0'} text-amber-300 font-bold transition-opacity duration-200 text-[3.5cqw]`}>
            🎅 SUPER SANTA MODE! ({(Math.max(0, bonusTimer)/1000).toFixed(1)}s)
         </div>
       </div>
 
-      {/* Game Board */}
-      <div 
-        className={`relative p-2 rounded-xl shadow-2xl border-4 transition-colors duration-500 ${COLORS.BOARD_BG} ${isBonusActive ? 'border-amber-400' : COLORS.BOARD_BORDER}`}
-      >
+      {/* Game Board - Merged Wrapper and Grid to fix layout issues */}
         <div 
-          className="grid gap-1"
-          style={{ 
-            gridTemplateColumns: `repeat(${GRID_SIZE}, minmax(0, 1fr))`,
-            gridTemplateRows: `repeat(${GRID_SIZE}, minmax(0, 1fr))`,
-            width: 'min(540px, 90vw, 60vh)',
-            height: 'min(540px, 90vw, 60vh)',
-          }}
+            className={`w-full aspect-square grid gap-[0.5cqw] p-[1cqw] rounded-xl shadow-2xl border-[0.6cqw] transition-colors duration-500 ${COLORS.BOARD_BG} ${isBonusActive ? 'border-amber-400' : COLORS.BOARD_BORDER}`}
+            style={{ 
+                gridTemplateColumns: `repeat(${GRID_SIZE}, minmax(0, 1fr))`,
+                gridTemplateRows: `repeat(${GRID_SIZE}, minmax(0, 1fr))`,
+            }}
         >
-          {renderGrid()}
+            {renderGrid()}
         </div>
+
+      {/* Controls Hint - Scaled using cqw */}
+        <div className="mt-[3cqw] text-white flex gap-[3cqw] font-bold drop-shadow-md text-[2.5cqw]">
+            <span className="flex items-center gap-[1cqw]"><kbd className="bg-white border border-slate-300 px-[1.5cqw] py-[0.5cqw] rounded shadow-sm text-slate-800">WASD</kbd> Move</span>
+            <span className="flex items-center gap-[1cqw]"><kbd className="bg-white border border-slate-300 px-[1.5cqw] py-[0.5cqw] rounded shadow-sm text-slate-800">Arrows</kbd> Move</span>
       </div>
 
-      {/* Controls Hint - Updated for visibility on dark background */}
-      <div className="mt-6 text-white text-sm flex gap-4 font-bold drop-shadow-md">
-        <span className="flex items-center gap-1"><kbd className="bg-white border border-slate-300 px-2 py-1 rounded shadow-sm text-slate-800">WASD</kbd> Move</span>
-        <span className="flex items-center gap-1"><kbd className="bg-white border border-slate-300 px-2 py-1 rounded shadow-sm text-slate-800">Arrows</kbd> Move</span>
+      {/* Start Screen - Centered in screen, but scales reasonably */}
+        {gameState === 'START' && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+                <div className="text-center p-[5cqw] bg-white/10 rounded-2xl backdrop-blur-md shadow-2xl flex flex-col items-center max-w-sm w-full ">
+                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-amber-200 to-transparent opacity-50"></div>
+                    <img src={ASSETS.KOALA_STARTSCENE} alt="Koala" className="w-64 h-auto mb-6 drop-shadow-lg rounded-lg" />
+                    <button 
+                        onClick={restartGame}
+                        className="bg-amber-500 hover:bg-amber-400 text-white font-bold py-3 px-8 rounded-full text-xl shadow-lg transition-transform hover:scale-105 w-64"
+                    >
+                        Start Game
+                    </button>
+                </div>
+            </div>
+        )}
       </div>
 
-      {/* Start Screen */}
-      {gameState === 'START' && (
-         <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-             <div className="text-center p-8 bg-white/10 rounded-2xl border border-white/20 backdrop-blur-md shadow-2xl flex flex-col items-center">
-                 <img src={ASSETS.KOALA_STARTSCENE} alt="Koala" className="w-64 h-auto mb-6 drop-shadow-lg rounded-lg" />
-                 <button 
-                    onClick={restartGame}
-                    className="bg-amber-500 hover:bg-amber-400 text-white font-bold py-4 px-12 rounded-full text-2xl shadow-lg transition-transform hover:scale-105"
-                 >
-                     Start Game
-                 </button>
-             </div>
-         </div>
-      )}
-
-      {/* Game Over Modal */}
+      {/* Game Over Modal - Full Screen Overlay */}
       {gameState === 'GAME_OVER' && (
         <GameOverOverlay 
           score={score} 
